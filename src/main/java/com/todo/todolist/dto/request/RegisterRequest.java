@@ -1,4 +1,4 @@
-package com.todo.todolist.dto;
+package com.todo.todolist.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
