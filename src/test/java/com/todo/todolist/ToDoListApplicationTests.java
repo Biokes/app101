@@ -13,20 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import static com.todo.todolist.utils.Encryption.compare;
 import static com.todo.todolist.utils.Encryption.encrypt;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
 class ToDoListApplicationTests {
     @Autowired
     private UserServices userServices;
-//    @BeforeEach
-//    void wipe(){
-//        userServices.deleteAll();
-//    }
     @Test
     void testUserRegister(){
         RegisterRequest  register1 = new RegisterRequest();
@@ -51,7 +47,7 @@ class ToDoListApplicationTests {
         updateProfileRequest.setId(response.getId());
         userServices.updateProfile(updateProfileRequest);
         User user = userServices.findUserById(response.getId());
-        assertEquals(encrypt(updateProfileRequest.getNewPassword()),user.getPassword());
+        assertTrue(compare(updateProfileRequest.getNewPassword(),user.getPassword()));
     }
 
 }

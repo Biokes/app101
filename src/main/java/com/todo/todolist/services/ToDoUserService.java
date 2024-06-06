@@ -31,7 +31,6 @@ public class ToDoUserService implements UserServices{
         register1.setPassword(encrypt(register1.getPassword()));
         User user = mapper.map(register1, User.class);
         user = repo.save(user);
-        log.info("User ----> {}", user);
         return mapper.map(user, RegisterResponse.class);
     }
     public long count() {
@@ -51,7 +50,7 @@ public class ToDoUserService implements UserServices{
                 findUserById(updateProfileRequest.getId()).getPassword()))
             throw new UserNotFoundException(INCORRECT_PASSWORD.getMessage());
         User userFound = findUserById(updateProfileRequest.getId());
-        userFound.setPassword(updateProfileRequest.getNewPassword());
+        userFound.setPassword(encrypt(updateProfileRequest.getNewPassword()));
         userFound = repo.save(userFound);
         return mapper.map(userFound, UpdateProfileResponse.class);
     }
