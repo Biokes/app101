@@ -11,7 +11,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
+import static com.todo.todolist.utils.Encryption.encrypt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -40,12 +42,10 @@ class ToDoListApplicationTests {
         UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest();
         updateProfileRequest.setOldPassword("password");
         updateProfileRequest.setNewPassword("password12");
-        updateProfileRequest.setId(120L);
-        User user = userServices.findUserById(120L);
-//        assertEquals(decrypt(user.getPassword()),updateProfileRequest.getOldPassword());
-        UpdateProfileResponse response = userServices.updateProfile(updateProfileRequest);
-        assertNotEquals(updateProfileRequest.getOldPassword(),user.getPassword());
-
+        updateProfileRequest.setId(1L);
+        userServices.updateProfile(updateProfileRequest);
+        User user = userServices.findUserById(1L);
+        assertEquals(encrypt(updateProfileRequest.getNewPassword()),user.getPassword());
     }
 
 }
