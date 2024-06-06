@@ -39,12 +39,18 @@ class ToDoListApplicationTests {
     @Test
     @DisplayName("test update user profile")
     void testUpdateProfile(){
+        RegisterRequest  register1 = new RegisterRequest();
+        register1.setPassword("password");
+        register1.setEmail("officialBiokes@gmail.com");
+        RegisterResponse response =userServices.registerUser(register1);
+        assertThat(response).isNotNull();
+        log.info("RegisterResponsne ---> {}",response);
         UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest();
         updateProfileRequest.setOldPassword("password");
         updateProfileRequest.setNewPassword("password12");
-        updateProfileRequest.setId(1L);
+        updateProfileRequest.setId(response.getId());
         userServices.updateProfile(updateProfileRequest);
-        User user = userServices.findUserById(1L);
+        User user = userServices.findUserById(response.getId());
         assertEquals(encrypt(updateProfileRequest.getNewPassword()),user.getPassword());
     }
 

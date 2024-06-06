@@ -9,6 +9,7 @@ import com.todo.todolist.error.UserNotFoundException;
 import com.todo.todolist.models.User;
 import com.todo.todolist.utils.Mapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import static com.todo.todolist.utils.Encryption.encrypt;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ToDoUserService implements UserServices{
     private final UsersRepo repo;
     private ModelMapper mapper;
@@ -28,7 +30,8 @@ public class ToDoUserService implements UserServices{
     public RegisterResponse registerUser(RegisterRequest register1) {
         register1.setPassword(encrypt(register1.getPassword()));
         User user = mapper.map(register1, User.class);
-        repo.save(user);
+        user = repo.save(user);
+        log.info("User ----> {}", user);
         return mapper.map(user, RegisterResponse.class);
     }
     public long count() {
@@ -44,8 +47,8 @@ public class ToDoUserService implements UserServices{
 
     @Override
     public UpdateProfileResponse updateProfile(UpdateProfileRequest updateProfileRequest) {
-        if(!compare(encrypt(findUserById(updateProfileRequest.getId()).getPassword()),
-                updateProfileRequest.getOldPassword()))
+        if(!compare(updateProfileRequest.getOldPassword()   ,
+                findUserById(updateProfileRequest.getId()).getPassword()))
             throw new UserNotFoundException(INCORRECT_PASSWORD.getMessage());
         User userFound = findUserById(updateProfileRequest.getId());
         userFound.setPassword(updateProfileRequest.getNewPassword());

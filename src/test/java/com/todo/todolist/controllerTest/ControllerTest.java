@@ -20,7 +20,7 @@ public class ControllerTest {
     private MockMvc mockMvc;
     @Test
     public void testRegister() {
-        String details = "{\"}";
+        String details = "{\"password\" : \"password\", \"email\" : \"biokes@gmail.com\"}";
         try {
             mockMvc.perform(post("/api/v1/Register")
                     .contentType(MediaType.APPLICATION_JSON)

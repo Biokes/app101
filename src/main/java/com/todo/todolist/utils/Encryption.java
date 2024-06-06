@@ -12,8 +12,7 @@ public class Encryption {
     public static String encrypt(String password){
         return encoder.encode(password);
     }
-    public static boolean compare(String encrypted,String password){
-        // Create an encoder with all the defaults
+    public static boolean compare(String password,String encrypted){
         return encoder.matches(password, encrypted);
 
     }
