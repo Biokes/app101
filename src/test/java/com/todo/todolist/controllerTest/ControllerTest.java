@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -22,9 +23,11 @@ public class ControllerTest {
     public void testRegister() {
         String details = "{\"password\" : \"password\", \"email\" : \"biokes@gmail.com\"}";
         try {
-            mockMvc.perform(post("/api/v1/Register")
+            mockMvc.perform(post("/api/v1/register/user")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(details));
+                    .content(details))
+                    .andExpect(status().isCreated());
+
         }
         catch(Exception error){
             assertThat(error).isNull();
